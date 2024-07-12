@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SoNanUI</id>
+    <version>1.0.0</version>
+    <authors>SoNanUI</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="2203dc8ba4a962b47a1675a44bfb1f6ec9480821" />
+    <dependencies>
+      <group targetFramework="net6.0-windows7.0">
+        <dependency id="NetDimension.NanUI.Runtime" version="109.0.5414.1" exclude="Build,Analyzers" />
+        <dependency id="WinFormium" version="1.0.109.267" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net6.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WindowsForms" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="E:\workspace\SoDemo\SoNanUI\SoNanUI\bin\Debug\net6.0-windows\SoNanUI.runtimeconfig.json" target="lib\net6.0-windows7.0\SoNanUI.runtimeconfig.json" />
+    <file src="E:\workspace\SoDemo\SoNanUI\SoNanUI\bin\Debug\net6.0-windows\SoNanUI.dll" target="lib\net6.0-windows7.0\SoNanUI.dll" />
+  </files>
+</package>

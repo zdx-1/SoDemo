@@ -1,0 +1,5 @@
+/dist/*
+/public/*
+public/*
+/src/assets/styles/common-form.less
+/src/assets/styles/common-detail.less

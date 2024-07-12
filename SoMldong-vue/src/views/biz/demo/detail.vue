@@ -1,0 +1,102 @@
+<template>
+  <BasicModal
+    width="60%"
+    v-bind="$attrs"
+    @register="registerModal"
+    :footer="null"
+    title="演示详情"
+    :destroyOnClose="true"
+  >
+    <div class="desc-wrap">
+      <template v-if="detailCard.length">
+        <div class="desc-card" v-for="item in detailCard" :key="item.title">
+          <a-spin :spinning="loadding">
+            <Description
+              class="desc-item"
+              :title="item.title"
+              :data="detailData"
+              :schema="item.list"
+              size="middle"
+              :labelStyle="{ width: '180px' }"
+              :contentStyle="{ width: '300px' }"
+              v-if="Array.isArray(item.list) && item.list.length"
+            />
+          </a-spin>
+        </div>
+      </template>
+      <div class="desc-single" v-else>
+        <a-spin :spinning="loadding">
+          <Description
+            size="middle"
+            bordered
+            title="基本信息"
+            :data="detailData"
+            :schema="detailSchemas"
+            :labelStyle="{ width: '180px' }"
+            :contentStyle="{ width: '300px' }"
+          >
+            <template #b5="{ text }">
+              <a>{{ text }}</a>
+            </template>
+          </Description>
+        </a-spin>
+      </div>
+    </div>
+  </BasicModal>
+</template>
+<script setup>
+  import { reactive, ref } from 'vue';
+  import { Description } from '/@/components/Description/index';
+  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { demoDetail } from '/@/api/biz/demo';
+  import { detailSchemas, async } from './schemas';
+  import { useDetailSchema } from '/@/hooks/web/useSchema';
+  import { buildDescGroup } from '/@/utils/action.js';
+  import './components/view/index';
+  // 声明Emits
+  defineEmits(['success', 'register']);
+  let currentRecord = reactive({}); // 当前记录
+  const detailData = ref({});
+  const detailCard = ref([]);
+  const loadding = ref(true);
+  // 注册模态框
+  const [registerModal, {}] = useModalInner(async (data) => {
+    if (typeof data.record === 'object') {
+      detailCard.value = buildDescGroup(detailSchemas, data);
+      if (async !== false) {
+        useDetailSchema({
+          tableName: 'biz_demo',
+          detailCard,
+          detailData: data,
+        });
+      }
+      const values = { ...data.record };
+      currentRecord = values;
+      demoDetail({
+        id: currentRecord.id,
+      }).then((res) => {
+        const newData = {
+          ...data,
+          record: {
+            ...values,
+            ...res,
+          },
+        };
+        if (async === false) {
+          detailCard.value = buildDescGroup(detailSchemas, newData);
+        } else {
+          useDetailSchema({
+            tableName: 'biz_demo',
+            detailCard,
+            detailData: newData,
+          });
+        }
+        detailData.value = res;
+        loadding.value = false;
+      });
+    }
+  });
+</script>
+<style scoped lang="less">
+  @import '/@/assets/styles/common-detail.less';
+</style>

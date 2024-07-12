@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4205627 */
+  src: url('iconfont.woff2?t=1692694286339') format('woff2'),
+       url('iconfont.woff?t=1692694286339') format('woff'),
+       url('iconfont.ttf?t=1692694286339') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yuangongguanli:before {
+  content: "\e6dc";
+}
+
+.icon-qietu-gonggao1:before {
+  content: "\e613";
+}
+
+.icon-qietu-home:before {
+  content: "\e60c";
+}
+
+.icon-qietu-shangpin:before {
+  content: "\e60d";
+}
+
+.icon-qietu-danju:before {
+  content: "\e60f";
+}
+
+.icon-qietu-cangku:before {
+  content: "\e610";
+}
+
+.icon-qietu-mendian:before {
+  content: "\e611";
+}
+
+.icon-qietu-shezhi:before {
+  content: "\e612";
+}
+

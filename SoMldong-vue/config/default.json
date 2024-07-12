@@ -1,0 +1,86 @@
+{
+  "apiUrl": "http://localhost:18080/dev/schema/getByTableName",
+  "theme": "default",
+  "appId": "admin",
+  "appSecret": "123456",
+  "templates": [
+    {
+      "name": "接口模板",
+      "selected": true,
+      "templateFile": "api.art",
+      "targetPath": "src/api/<{moduleName}>",
+      "targetFileName": "<{tableCamelName}>.ts"
+    },
+    {
+      "name": "首页模板",
+      "selected": true,
+      "templateFile": "index.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>",
+      "targetFileName": "index.vue"
+    },
+    {
+      "name": "元数据",
+      "selected": true,
+      "templateFile": "schemas.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>/schemas",
+      "targetFileName": "index.ts",
+      "data": true
+    },
+    {
+      "name": "表单页",
+      "selected": true,
+      "templateFile": "add.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>",
+      "targetFileName": "add.vue"
+    },
+    {
+      "name": "详情页",
+      "selected": true,
+      "templateFile": "detail.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>",
+      "targetFileName": "detail.vue"
+    },
+    {
+      "name": "路由文件",
+      "selected": true,
+      "templateFile": "route.art",
+      "targetPath": "src/router/routes/modules",
+      "targetFileName": "<{schemaGroup.code}>.ts"
+    },
+    {
+      "name": "表单自定义组件入口文件",
+      "selected": true,
+      "templateFile": "formComponents.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>/components/form",
+      "targetFileName": "index.ts"
+    },
+    {
+      "name": "列表自定义组件入口文件",
+      "selected": true,
+      "templateFile": "viewComponents.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>/components/view",
+      "targetFileName": "index.ts"
+    },
+    {
+      "name": "表单自定义组件",
+      "selected": false,
+      "templateFile": "customFormComponent.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>/components/form",
+      "targetFileName": "*.vue"
+    },
+    {
+      "name": "列表/详情自定义组件",
+      "selected": false,
+      "templateFile": "customViewComponent.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>/components/view",
+      "targetFileName": "*.vue"
+    },
+    {
+      "name": "导出抽屉",
+      "selected": "<{ext.defaultAuthTypeList?.includes('export')}>",
+      "templateFile": "exportDrawer.art",
+      "targetPath": "src/views/<{moduleName}>/<{tableCamelName}>",
+      "targetFileName": "exportDrawer.vue"
+    }
+  ]
+}

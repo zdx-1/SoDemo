@@ -1,0 +1,109 @@
+/* eslint-disable */
+import { handleIfShow, dynamicDisabled } from '/@/utils/action';
+// 是否异步元数据
+// 当为异步时，进入页面会通过接口重新获取元数据
+// 当为同步时，只使用代码生成的本地元数据
+export const async = <{ext.async!==false}>;
+// 表单元数据配置
+export const formSchemas = [
+  {
+    field: 'id',
+    label: '主键',
+    component: 'Input',
+    colProps: {
+      xl: 0,
+      xxl: 0,
+      xs: 0, 
+      sm: 0, 
+      md: 0, 
+      lg: 0,
+    },
+  },<{each columns.filter(column=>column.fieldCamelName!=='id')}>
+  {
+    field: '<{$value.fieldCamelName}>',
+    label: '<{$value.remark}>',<{if $value.defaultValue }>
+    defaultValue: <{stringify(handleDefault($value.defaultValue,$value))}>,<{/if}>
+    component: '<{$value.component}>',<{if $value.ext.required == true}>
+    rules: [{ required: <{$value.ext.required == true}>, message: '请输入<{$value.remark}>', trigger: 'blur'<{if $value.componentProps?.dataType}>, type: '<{$value.componentProps?.dataType}>'<{/if}> }],<{/if}>
+    colProps: {<{if $value.component == 'Input' && $value.componentProps.type=='hidden'}>
+      xl: 0,
+      xxl: 0,<{else}>
+      xl: <{$value.ext.span || 24}>,
+      xxl: <{$value.ext.span || 24}>,<{/if}>
+    },<{if $value.ext.help}>
+    helpMessage: [<{each $value.ext.help.split('\n') item}>"<{item}>",<{/each}>],<{/if}>
+    componentProps: {<{each $value.componentProps v i}>
+      <{i}>: <{stringify($value.componentProps[i])}>,<{/each}><{if $value.ext.popupContainerInBody}>
+      getPopupContainer: () => document.body,<{/if}>
+    },
+    ifShow(e) {
+      const ext = <{stringify($value.ext)}>;
+      return handleIfShow(e, ext);
+    },
+    dynamicDisabled(e) {
+      const ext = <{stringify($value.ext)}>;
+      return dynamicDisabled(e, ext);
+    },
+  },<{/each}>
+];
+// 详情元数据配置
+export const detailSchemas = [<{each columns.filter(column=>column.ext.viewHide!==1)}>
+  {
+    field: '<{$value.fieldCamelName}>',
+    label: '<{$value.remark}>',
+    component: '<{$value.component}>',
+    span: <{$value.ext.span || 24}>,
+    componentProps: {<{each $value.componentProps v i}>
+      <{i}>: <{stringify($value.componentProps[i])}>,<{/each}>
+    },
+    ext: <{stringify($value.ext)}>,
+  },<{/each}>
+];
+// 表格列定义
+export const tableColumns = [
+    // 列定义<{each columns.filter(column=>column.ext.listHide!==1)}>
+    {
+      title: '<{$value.remark}>',
+      dataIndex: '<{$value.fieldCamelName}>',
+      component: '<{$value.component}>',
+      componentProps: {<{each $value.componentProps v i}>
+        <{i}>: <{stringify($value.componentProps[i])}>,<{/each}>
+      },
+    },<{/each}>
+    {
+      // flag: 'ACTION',
+      title: '操作',
+      key: 'ACTION',
+      dataIndex: 'ACTION',
+      slots: { customRender: 'action' },
+    },
+  ];
+// 表格导出列定义
+export const tableExportColumns = [
+    // 列定义<{each columns.filter(column=>column.ext.listHide!==1)}>
+    {
+      name: '<{$value.remark}>',
+      key: '<{$value.fieldCamelName}>',
+      component: '<{$value.component}>',
+      handlerType: '<{$value.ext.excelColumnHandlerType}>',
+      componentProps: {<{each $value.componentProps v i}>
+        <{i}>: <{stringify($value.componentProps[i])}>,<{/each}>
+      },
+    },<{/each}>
+  ];
+// 搜索表单元数据
+export const searchFormSchemas = [<{each columns.filter(column=>column.ext.search && column.ext.searchType)}>
+    {
+      field: 'm_<{$value.ext.searchType}>_<{$value.fieldCamelName}>',
+      label: '<{$value.remark}>',
+      component: '<{$value.component}>',
+      colProps: {
+        xl: <{$value.ext.searchSpan || 6}>,
+        xxl: <{$value.ext.searchSpan || 6}>,
+      },
+      componentProps: {<{each $value.searchComponentProps v i}>
+        <{i}>: <{stringify($value.searchComponentProps[i])}>,<{/each}>
+      },
+    },<{/each}>
+  ];
+/* eslint-disable */

@@ -1,0 +1,37 @@
+# Mysql数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:mldong-plus}?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&nullCatalogMeansCurrent=true
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:123456}
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+
+g:
+  blacklist:
+    - /sys/**/save
+    - /sys/**/update
+    - /sys/**/remove
+    - /sys/user/updatePwd
+    - /sys/user/locked
+    - /sys/user/unLocked
+    - /sys/user/grantRole
+    - /wf/**/remove
+    - /sys/rbac/saveRoleMenu
+    - /sys/rbac/saveUserRole
+    - /sys/rbac/removeUserRole
+    - /sys/menu/syncRoute
+    - /dev/**/save
+    - /dev/**/update
+    - /dev/**/remove
+    - /dev/schema/importTable
+    - /sys/user/logout**
+    - /sys/user/kickout**
+    - /sys/fileInfo/upload
+
+sa-token:
+  is-log: false
+  max-login-count: 200

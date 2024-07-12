@@ -1,0 +1,65 @@
+{
+  "id": "4205627",
+  "name": "mldong管理端",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "18931514",
+      "name": "员工管理",
+      "font_class": "yuangongguanli",
+      "unicode": "e6dc",
+      "unicode_decimal": 59100
+    },
+    {
+      "icon_id": "36909503",
+      "name": "切图-公告",
+      "font_class": "qietu-gonggao1",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "36902368",
+      "name": "切图-home",
+      "font_class": "qietu-home",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "36902369",
+      "name": "切图-商品",
+      "font_class": "qietu-shangpin",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "36902371",
+      "name": "切图-单据",
+      "font_class": "qietu-danju",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "36902372",
+      "name": "切图-仓库",
+      "font_class": "qietu-cangku",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "36902373",
+      "name": "切图-门店",
+      "font_class": "qietu-mendian",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "36902374",
+      "name": "切图-设置",
+      "font_class": "qietu-shezhi",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    }
+  ]
+}

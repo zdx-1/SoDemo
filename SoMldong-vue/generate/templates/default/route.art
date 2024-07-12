@@ -1,0 +1,45 @@
+import { AppRouteRecordRaw } from '/@/router/types';
+import { LAYOUT } from '/@/router/constant';
+const menu: AppRouteRecordRaw = {
+  name: '<{schemaGroup.code}>:manager',
+  path: '/<{schemaGroup.code}>/manager',
+  component: LAYOUT,
+  meta: {
+    title: '<{schemaGroup.name}>',
+    icon: '<{schemaGroup.icon || 'ant-design:home-outlined'}>',
+    perms: ['admin', '<{schemaGroup.code}>:manager'],
+    orderNo: <{schemaGroup.sort || 100}>,
+    component: 'LAYOUT',
+  },
+  children: [<{each schemaGroup.schemaList?.filter(item=>item.ext.isCreateRoute!==false)}>
+    {
+      name: '<{$value.moduleName}>:<{$value.tableCamelName}>',
+      path: '/<{$value.moduleName}>/<{$value.tableCamelName}>/index',
+      component: () => import('/@/views/<{$value.moduleName}>/<{$value.tableCamelName}>/index.vue'),
+      meta: {
+        title: '<{$value.remark}>',
+        icon: '<{$value.icon || 'ant-design:home-outlined'}>',
+        orderNo: <{$index}>,<{if $value?.ext?.hideMenu == true}>
+        hideMenu: true,<{/if}>
+        perms: ['admin', '<{$value.moduleName}>:<{$value.tableCamelName}>'],
+        component: '/<{$value.moduleName}>/<{$value.tableCamelName}>/index',
+        btns: {<{if $value.ext.defaultAuthTypeList?.includes('list')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:page': '分页查询<{$value.remark}>',<{if $value.isTree}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:list': '<{$value.remark}>列表',
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:tree': '<{$value.remark}>树',<{/if}><{/if}><{if $value.ext.defaultAuthTypeList?.includes('detail')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:detail': '查看<{$value.remark}>详情',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('save')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:save': '添加<{$value.remark}>',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('update')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:update': '修改<{$value.remark}>',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('remove')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:remove': '删除<{$value.remark}>',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('export')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:export': '导出<{$value.remark}>',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('advSearch')}>
+          'btn:<{$value.moduleName}>:<{$value.tableCamelName}>:advSearch': '高级搜索按钮',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('importTo')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:importTo': '导入<{$value.remark}>',<{/if}><{if $value.ext.defaultAuthTypeList?.includes('downloadImportTemplate')}>
+          '<{$value.moduleName}>:<{$value.tableCamelName}>:downloadImportTemplate': '下载导入<{$value.remark}>模板',<{/if}><{each $value.ext.customAuthTypeList}>
+          '<{$value.value}>': '<{$value.label}>',<{/each}>
+        },
+      },
+    },<{/each}>
+  ],
+};
+
+export default menu;

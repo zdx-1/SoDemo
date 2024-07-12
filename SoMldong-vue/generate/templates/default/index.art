@@ -1,0 +1,220 @@
+<template>
+  <PageWrapper>
+    <BasicTable
+      rowKey="id"
+      :showTableSetting="true"
+      @register="registerTable"
+      :useSearchForm="searchFormSchemas.length > 0"
+      :showIndexColumn="false"<{if tableType==3}>
+      :immediate="false"<{/if}>
+      :beforeFetch="handleBeforeFetch"
+      :rowSelection="rowSelection"
+      :formConfig="{ labelWidth: <{if ext.searchLabelWidth}>'<{ext.searchLabelWidth}>'<{else}>100<{/if}>, schemas: searchFormSchemas }"
+    >
+      <!--左上角按钮-->
+      <template #tableTitle>
+        <TableAction
+          :actions="[
+            {
+              label: '新增',
+              type: 'primary',
+              size: 'middle',
+              icon: 'ant-design:plus-outlined',
+              onClick: handleAdd.bind(null),
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:save'], // 根据权限控制是否显示: 无权限，不显示
+            },<{if ext.defaultAuthTypeList?.includes('export')}>
+            {
+              label: '导出',
+              type: 'primary',
+              size: 'middle',
+              icon: 'ant-design:export-outlined',
+              onClick: handleExport.bind(null),
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:export'], // 根据权限控制是否显示: 无权限，不显示
+            },<{/if}>
+          ]"
+          :dropDownActions="[
+            {
+              label: '删除',
+              icon: 'ant-design:delete-outlined',
+              popConfirm: {
+                title: '确定删除吗？',
+                confirm: handleDelete.bind(null),
+              },
+              ifShow: () => {
+                return checkedKeys.length > 0;
+              },
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:remove'], // 根据权限控制是否显示: 有权限，会显示
+            },
+          ]"
+        >
+          <template #more>
+            <a-button style="margin-left: 8px">
+              批量操作
+              <DownOutlined />
+            </a-button>
+          </template>
+        </TableAction>
+      </template>
+      <!--操作项-->
+      <template #action="{ record }">
+        <TableAction
+          :stopButtonPropagation="true"
+          :actions="[
+            {
+              label: '详情',
+              onClick: handleDetail.bind(null, record),
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:detail'], // 根据权限控制是否显示: 无权限，不显示
+            },
+            {
+              label: '编辑',
+              onClick: handleEdit.bind(null, record),
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:update'], // 根据权限控制是否显示: 无权限，不显示
+            },<{each ext?.actions?.filter(item=>item.position=='action')}>
+            {
+              label: '<{$value.label}>',
+              onClick: open<{$value.component}>.bind(null, record),
+              auth: ['admin', '<{$value.auth}>'],
+              disabled: record.$disabledBtnCodeKeys?.includes('<{$value.auth}>') || false,
+            },<{/each}>
+          ]"
+          :dropDownActions="[<{if isTree}>
+            {
+              label: '添加下级',
+              onClick: handleAdd.bind(null, record),
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:save'], // 根据权限控制是否显示: 无权限，不显示
+            },<{/if}>
+            {
+              label: '删除',
+              popConfirm: {
+                title: '确定删除吗？',
+                confirm: handleDelete.bind(null, record),
+              },
+              auth: ['admin', '<{moduleName}>:<{tableCamelName}>:remove'], // 根据权限控制是否显示: 有权限，会显示
+            },
+          ]"
+        />
+      </template> </BasicTable
+    ><<{className}>Add @register="registerAdd<{formType==2?'Drawer':'Modal'}>" @success="handleSuccess" /><<{className}>Detail
+      @register="registerDetail<{formType==2?'Drawer':'Modal'}>"
+    /><{if ext.defaultAuthTypeList?.includes('export')}><<{className}>ExportDrawer @register="registerExportDrawer" /><{/if}><{each ext?.actions?.filter(item=>item.position=='action')}>
+    <<{$value.component}> ref="<{$value.component}>Ref" /><{/each}>
+  </PageWrapper>
+</template>
+
+<script setup>
+  import { ref, unref } from 'vue';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { DownOutlined } from '@ant-design/icons-vue';
+  import { <{tableCamelName}>Del, <{tableCamelName}><{if isTree}>Tree<{else}>Page<{/if}> } from '/@/api/<{moduleName}>/<{tableCamelName}>';
+  import <{className}>Add from './add.vue';
+  import <{className}>Detail from './detail.vue';<{if ext.defaultAuthTypeList?.includes('export')}>
+  import <{className}>ExportDrawer from './exportDrawer.vue';<{/if}>
+  import { use<{formType==2?'Drawer':'Modal'}> } from '/@/components/<{formType==2?'Drawer':'Modal'}>';<{if ext.defaultAuthTypeList?.includes('export') && formType!=2}>
+  import { useDrawer } from '/@/components/Drawer';<{/if}>
+  import { message } from 'ant-design-vue';
+  import { tableColumns as columns, searchFormSchemas, async } from './schemas';
+  import { useTableSchema } from '/@/hooks/web/useSchema';
+  import './components/view/index';<{each ext?.actions?.filter(item=>item.position=='action')}>
+  // 导入<{$value.label}>组件
+  import <{$value.component}> from './components/<{$value.component}>.vue';<{/each}><{if tableType==3}>
+  const props = defineProps({
+    <{ext?.relMainTableIdKey}>: {
+      type: [String, Number],
+    },
+  });<{/if}>
+  // 注册表格
+  const [registerTable, tableMethods] = useTable({
+    api: <{tableCamelName}><{if isTree}>Tree<{else}>Page<{/if}>,
+    columns: columns,
+  });
+  if (async !== false) {
+    useTableSchema({
+      tableName: '<{tableName}>',
+      tableRef: tableMethods,
+    });
+  }
+  const { reload, clearSelectedRowKeys } = tableMethods;<{each ext?.actions?.filter(item=>item.position=='action')}>
+  // 定义<{$value.label}>组件操作Ref
+  const <{$value.component}>Ref = ref();<{/each}>
+  // 选中行id集合
+  const checkedKeys = ref([]);
+  // 多选处理
+  const rowSelection = {
+    type: 'checkbox',
+    onChange: (keys) => {
+      checkedKeys.value = keys;
+    },
+  };
+  const [registerAdd<{formType==2?'Drawer':'Modal'}>, { open<{formType==2?'Drawer':'Modal'}>, set<{formType==2?'Drawer':'Modal'}>Props }] = use<{formType==2?'Drawer':'Modal'}>();
+  const [registerDetail<{formType==2?'Drawer':'Modal'}>, { open<{formType==2?'Drawer':'Modal'}>: openDetail<{formType==2?'Drawer':'Modal'}> }] = use<{formType==2?'Drawer':'Modal'}>();<{if ext.defaultAuthTypeList?.includes('export')}>
+  const [registerExportDrawer, { openDrawer: openExportDrawer }] = useDrawer();<{/if}>
+  /* eslint-disable */
+  // 打开添加表单
+  const handleAdd = (record) => {
+    open<{formType==2?'Drawer':'Modal'}>(true, {
+      record: {<{if isTree}>
+        parentId: record ? record.id : '',<{/if}><{if tableType==3}>
+        <{ext?.relMainTableIdKey}>: props.<{ext?.relMainTableIdKey}>,<{/if}>
+      },
+    });
+    set<{formType==2?'Drawer':'Modal'}>Props({ title: '新增<{remark}>' });
+  };
+  /* eslint-disable */
+  // 打开详情表单
+  const handleDetail = (record) => {
+    openDetail<{formType==2?'Drawer':'Modal'}>(true, {
+      record,
+    });
+  };
+  // 打开编辑表单
+  const handleEdit = (record) => {
+    open<{formType==2?'Drawer':'Modal'}>(true, {
+      record,
+      isUpdate: true,
+    });
+    set<{formType==2?'Drawer':'Modal'}>Props({ title: '编辑<{remark}>' });
+  };<{if ext.defaultAuthTypeList?.includes('export')}>
+  // 导出处理
+  const handleExport = () => {
+    openExportDrawer(true, {
+      searchInfo: tableMethods?.getForm()?.getFieldsValue(),
+    })
+  }<{/if}>
+  // 多选删除
+  const handleDelete = (record) => {
+    const ids = [];
+    if (record && record.id) {
+      ids.push(record.id);
+      checkedKeys.value = [];
+    } else {
+      ids.push(...unref(checkedKeys));
+    }
+    <{tableCamelName}>Del({
+      ids: ids,
+    }).then(() => {
+      message.success('删除成功');
+      clearSelectedRowKeys();
+      reload();
+    });
+  };<{each ext?.actions?.filter(item=>item.position=='action')}>
+  // 打开<{$value.label}>
+  const open<{$value.component}> = (record) => {
+    <{$value.component}>Ref?.value.show(record, tableMethods);
+  }<{/each}>
+  // 添加、编辑成功回调
+  const handleSuccess = () => {
+    reload();
+  };
+  // 处理查询请求参数
+  const handleBeforeFetch = (params) => {
+    return {
+      ...params,<{if tableType==3}>
+      m_EQ_<{ext?.relMainTableIdKey}>: props.<{ext?.relMainTableIdKey}><{/if}>
+    };
+  };<{if tableType==3}>
+  defineExpose({
+    reload,
+  })<{/if}>
+</script>
+
+<style lang="less" scoped></style>

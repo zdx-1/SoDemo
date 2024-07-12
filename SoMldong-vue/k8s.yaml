@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cyt-front-ui-nginx-configmap
+data:
+  nginx_conf: |-
+    #user  nobody;
+    worker_processes  1;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        include       mime.types;
+        default_type  application/octet-stream;
+        sendfile        on;
+        keepalive_timeout  65;
+        server {
+            listen       80;
+            server_name  localhost;
+            location / {
+                root   /usr/share/nginx/html;
+                try_files $uri $uri/ /index.html;
+                index  index.html index.htm;
+            }
+            error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+                root   html;
+            }
+        }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cyt-front-ui
+  namespace: cyt-test
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: cyt-front-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cyt-front-ui
+  namespace: cyt-test
+spec:
+  selector:
+    matchLabels:
+      app: cyt-front-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cyt-front-ui
+    spec:
+      containers:
+        - name: cyt-front-ui
+          image: ${docker_url}
+          #imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: port
+              protocol: TCP
+          readinessProbe:            # 就续探针-可对外服务
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 30 #第一次健康检查的时间
+            periodSeconds: 5        #检查周期
+            timeoutSeconds: 5       #检查超时时间
+            successThreshold: 1     #成功次数判定成功
+            failureThreshold: 1     #失败次数判定失败
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/bash", "-c", "sleep 30"] # 让 pod 真正销毁前先 sleep 等待一段时间
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf 
+              name: pvc-cyt-front-ui-nginx-configmap
+              subPath: nginx.conf
+      volumes:
+        - name: pvc-cyt-front-ui-nginx-configmap
+          configMap:
+            name: cyt-front-ui-nginx-configmap
+            items:
+              - key: nginx_conf
+                path: nginx.conf
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+  name: cyt-front-ui-ingress
+  namespace: cyt-test
+spec:
+  rules:
+    - host: cyt-test.gxiit.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: cyt-front-ui
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: kkfileview
+                port:
+                  number: 8080
+            path: /preview
+            pathType: Prefix
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cyt-front-ui
+  namespace: cyt-test
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cyt-front-ui
+  targetCPUUtilizationPercentage: 60
+

@@ -1,0 +1,7 @@
+<template>
+  <PageWrapper> {{ msg }} </PageWrapper>
+</template>
+<script setup>
+  import { ref } from 'vue';
+  const msg = ref('<{remark}>');
+</script>

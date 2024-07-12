@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mldong.modules.sys.mapper.UserMapper">
+
+    <select id="selectCustom" resultType="com.mldong.modules.sys.vo.UserVO">
+        select t.*,
+        ( select group_concat( ur.role_id ) from sys_user_role ur where ur.user_id = t.id ) as role_ids
+        from sys_user t ${ew.customSqlSegment}
+    </select>
+    <select id="findById" resultType="com.mldong.modules.sys.vo.UserVO">
+        select t.*,
+        ( select group_concat( ur.role_id ) from sys_user_role ur where ur.user_id = t.id ) as role_ids
+        from sys_user t where t.id = #{id}
+    </select>
+    <select id="selectUserListByRoleCode" resultType="com.mldong.modules.sys.entity.User">
+        SELECT
+            *
+        FROM
+            sys_user u
+                LEFT JOIN sys_user_role ur ON u.id = ur.user_id
+        WHERE
+            EXISTS ( SELECT 1 FROM sys_role WHERE ur.role_id = sys_role.id AND sys_role.code = #{roleCode} AND sys_role.is_deleted = 0 )
+          AND u.is_deleted =0
+    </select>
+</mapper>

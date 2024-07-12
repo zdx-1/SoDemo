@@ -1,0 +1,170 @@
+<template>
+  <Basic<{formType==2?'Drawer':'Modal'}>
+    width="60%"
+    v-bind="$attrs"
+    @register="register<{formType==2?'Drawer':'Modal'}>"
+    okText="确定"
+    cancelText="取消"
+    title="新增<{remark}>"
+    @<{formType==2?'close':'cancel'}>="handleCancel"
+    :destroyOnClose="true"
+    @ok="handleOk"<{if formType==2}>
+    :showFooter="true"<{/if}>
+  >
+    <a-spin :spinning="loadding">
+      <BasicForm @register="registerForm" />
+    </a-spin>
+  </Basic<{formType==2?'Drawer':'Modal'}>>
+</template>
+<script setup>
+  import { reactive, ref, unref } from 'vue';
+  import { Basic<{formType==2?'Drawer':'Modal'}>, use<{formType==2?'Drawer':'Modal'}>Inner } from '/@/components/<{formType==2?'Drawer':'Modal'}>';
+  import { BasicForm, useForm } from '/@/components/Form';
+  import { message } from 'ant-design-vue';
+  import { <{tableCamelName}>SaveOrUpdate, <{tableCamelName}>Detail } from '/@/api/<{moduleName}>/<{tableCamelName}>';
+  import { formSchemas, async } from './schemas';
+  import { cloneDeep } from 'lodash-es';
+  import { useFormSchema } from '/@/hooks/web/useSchema';
+  import './components/form/index';<{if isTree}>
+  import { getAntTreeParents } from '/@/utils/tree';<{/if}>
+  // 声明Emits
+  const emit = defineEmits(['success', 'register']);
+  const schemas = ref([]);
+  const loadding = ref(false);
+  const isUpdate = ref(false); // 是否为更新
+  let currentRecord = reactive({}); // 当前记录<{if isTree}>
+  let treeData = reactive([]); // 树型数据<{/if}>
+  // 注册模态框
+  const [register<{formType==2?'Drawer':'Modal'}>, { close<{formType==2?'Drawer':'Modal'}>, changeOkLoading, changeLoading }] = use<{formType==2?'Drawer':'Modal'}>Inner(
+    async (data) => {
+      if (async === false) {
+        // 重新拷贝一份元数据，防止被修改
+        schemas.value = cloneDeep(formSchemas);
+      } else {
+        // 使用异步数据
+        useFormSchema({
+          tableName: '<{tableName}>',
+          formRef: formMethods,
+        });
+      }
+      if (typeof data.record === 'object') {
+        const values = { ...data.record };<{if columns.findIndex(item=>item.fieldName=='sort')!=-1}>
+        if (values.sort !== undefined) {
+          values.sort = Number(values.sort);
+        }<{/if}>
+        // 初始化表单
+        setFieldsValue(values);
+        isUpdate.value = data.isUpdate;
+        currentRecord = data.record;
+        if (isUpdate.value) {
+          loadding.value = true;
+          <{tableCamelName}>Detail({
+            id: currentRecord.id,
+          }).then((res) => {
+            currentRecord.value = res;
+            loadding.value = false;
+            // 初始化表单
+            setFieldsValue({
+              ...values,
+              ...currentRecord.value,<{if columns.findIndex(item=>item.fieldName=='sort')!=-1}>
+              sort: values.sort,<{/if}>
+            });
+            // 设置禁止的字段（详情接口提供，单条记录动态）
+            handleDisabledKeys(res?.$disabledKeyList);
+            // 设置隐藏的字段（详情接口提供，单条记录动态）
+            handleHideKeys(res?.$hideKeyList);
+          });
+        }
+      }
+    },
+  );
+  // 注册表单
+  const [registerForm, formMethods] = useForm({
+    labelWidth:<{if ext.labelWidth}> '<{ext.labelWidth}>'<{else}> 100<{/if}>,
+    showResetButton: false,
+    showSubmitButton: false,
+    schemas,
+    actionColOptions: {
+      span: 24,
+    },
+  });
+  const { setFieldsValue, resetFields, validate, updateSchema } = formMethods;
+  /**
+   * 设置disabled字段
+   * @param {*} keys
+   */
+  const handleDisabledKeys = (keys) => {
+    keys?.forEach((key) => {
+      updateSchema({
+        field: key,
+        componentProps: {
+          disabled: true,
+        },
+      });
+    });
+  };
+  /**
+   * 设置隐藏字段
+   * @param {*} keys
+   */
+  const handleHideKeys = (keys) => {
+    keys?.forEach((key) => {
+      updateSchema({
+        field: key,
+        ifShow: false,
+      });
+    });
+  };
+  // 关闭模态框事件
+  const handleCancel = () => {
+    // 重置表单
+    resetFields();
+  };
+  // 提交表单
+  const handleOk = () => {
+    changeOkLoading(true);
+    changeLoading(true);
+    validate()
+      .then((values) => {
+        const formData = { ...values };
+        if (isUpdate.value) {
+          formData.id = currentRecord.id;
+        }<{if isTree}>
+        // parentId设置默认值
+        formData.parentId = formData.parentId ? formData.parentId : '0';
+        // 组合名-所有父名称集合
+        let mergerNames = getAntTreeParents(formData.parentId, treeData).map((item) => item.title);
+        mergerNames.push(formData.name);
+        // 设置组合名
+        formData.mergerName = mergerNames.join(',');
+        // 设置层级
+        formData.levelCode = mergerNames.length - 1;<{/if}>
+        const successMsg = `${isUpdate.value ? '编辑' : '新增'}<{remark}>成功`;
+        const failMsg = `${isUpdate.value ? '编辑' : '新增'}<{remark}>失败`;
+        // 调用添加或编辑接口
+        <{tableCamelName}>SaveOrUpdate(formData, unref(isUpdate))
+          .then(() => {
+            changeOkLoading(false);
+            changeLoading(false);
+            // 重置表单
+            resetFields();
+            // 关闭模态框
+            close<{formType==2?'Drawer':'Modal'}>();
+            message.success(successMsg);
+            emit('success');
+          })
+          .catch((e) => {
+            changeOkLoading(false);
+            changeLoading(false);
+            message.error(e || failMsg);
+          });
+      })
+      .catch(() => {
+        changeOkLoading(false);
+        changeLoading(false);
+      });
+  };
+</script>
+<style scoped lang="less">
+  @import '/@/assets/styles/common-form.less';
+</style>

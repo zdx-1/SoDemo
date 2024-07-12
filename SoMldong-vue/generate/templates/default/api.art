@@ -1,0 +1,88 @@
+import { defHttp } from '/@/utils/http/axios';
+
+/**
+ * 分页查询<{remark}>列表
+ * @param data 查询参数
+ * @returns
+ */
+export function <{tableCamelName}>Page(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/page', data });
+}<{if isTree}>
+/**
+ * 查询<{remark}>列表
+ * @param params 查询参数
+ * @returns
+ */
+export function <{tableCamelName}>List(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/list', data });
+}
+/**
+ * 查询<{remark}>树
+ * @param data 查询参数
+ * @returns
+ */
+export function <{tableCamelName}>Tree(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/tree', data });
+}<{/if}>
+/**
+ * <{remark}>详情
+ * @param data 查询参数
+ * @returns
+ */
+export function <{tableCamelName}>Detail(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/detail', data });
+}
+/**
+ * 添加<{remark}>
+ * @param data 参数
+ * @returns
+ */
+export function <{tableCamelName}>Add(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/save', data });
+}
+/**
+ * 编辑<{remark}>
+ * @param data 参数
+ * @returns
+ */
+export function <{tableCamelName}>Edit(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/update', data });
+}
+
+/**
+ * 删除<{remark}>
+ * @param data 参数
+ * @returns
+ */
+export function <{tableCamelName}>Del(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/remove', data });
+}<{if ext.defaultAuthTypeList?.includes('export')}>
+/**
+ * 构造<{remark}>导出url
+ * @param data 参数
+ * @returns
+ */
+export function <{tableCamelName}>GenerateExportUrl(data) {
+  return defHttp.post({ url: '/<{moduleName}>/<{tableCamelName}>/generateExportUrl', data });
+}<{/if}>
+/**
+ * 保存或更新<{remark}>
+ * @param data 参数
+ * @param isUpdate 是否更新
+ * @returns
+ */
+export function <{tableCamelName}>SaveOrUpdate(data, isUpdate) {
+  if (isUpdate) {
+    return <{tableCamelName}>Edit(data);
+  } else {
+    return <{tableCamelName}>Add(data);
+  }
+}<{each ext.customApiList || [] }>
+/**
+ * <{$value.name}>
+ * @param data 参数
+ * @returns
+ */
+export function <{urlToCamelCase($value.url)}>(data) {
+  return defHttp.<{$value.method}>({ url: '<{$value.url}>', <{if $value.method=='get'}>params<{else}>data<{/if}>: data });
+}<{/each}>

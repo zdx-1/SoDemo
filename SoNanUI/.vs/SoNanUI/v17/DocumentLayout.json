@@ -1,0 +1,103 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\workspace\\SoDemo\\SoNanUI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|e:\\workspace\\sodemo\\sonanui\\sonanui\\mywindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|solutionrelative:sonanui\\mywindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|e:\\workspace\\sodemo\\sonanui\\sonanui\\app.manifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|solutionrelative:sonanui\\app.manifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|e:\\workspace\\sodemo\\sonanui\\sonanui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|solutionrelative:sonanui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|e:\\workspace\\sodemo\\sonanui\\sonanui\\myapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|solutionrelative:sonanui\\myapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|e:\\workspace\\sodemo\\sonanui\\sonanui\\sonanui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{01F9A18F-9F51-446A-82C7-965D3203E1D0}|SoNanUI\\SoNanUI.csproj|solutionrelative:sonanui\\sonanui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "app.manifest",
+              "DocumentMoniker": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\app.manifest",
+              "RelativeDocumentMoniker": "SoNanUI\\app.manifest",
+              "ToolTip": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\app.manifest",
+              "RelativeToolTip": "SoNanUI\\app.manifest",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAAAE8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001203|",
+              "WhenOpened": "2024-07-12T02:48:23.061Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SoNanUI.csproj",
+              "DocumentMoniker": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\SoNanUI.csproj",
+              "RelativeDocumentMoniker": "SoNanUI\\SoNanUI.csproj",
+              "ToolTip": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\SoNanUI.csproj",
+              "RelativeToolTip": "SoNanUI\\SoNanUI.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-12T02:45:45.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MyWindow.cs",
+              "DocumentMoniker": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\MyWindow.cs",
+              "RelativeDocumentMoniker": "SoNanUI\\MyWindow.cs",
+              "ToolTip": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\MyWindow.cs",
+              "RelativeToolTip": "SoNanUI\\MyWindow.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T02:43:03.765Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MyApp.cs",
+              "DocumentMoniker": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\MyApp.cs",
+              "RelativeDocumentMoniker": "SoNanUI\\MyApp.cs",
+              "ToolTip": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\MyApp.cs",
+              "RelativeToolTip": "SoNanUI\\MyApp.cs",
+              "ViewState": "AQIAACcAAAAAAAAAAAAAAEAAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T02:41:23.583Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\Program.cs",
+              "RelativeDocumentMoniker": "SoNanUI\\Program.cs",
+              "ToolTip": "E:\\workspace\\SoDemo\\SoNanUI\\SoNanUI\\Program.cs",
+              "RelativeToolTip": "SoNanUI\\Program.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAAABcAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-12T02:39:05.905Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
